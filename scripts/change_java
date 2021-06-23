@@ -1,0 +1,52 @@
+#!/bin/bash
+JAVA_VERSION=$1
+
+# Ex:
+# sudo update-alternatives --config java #set to 8
+# sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+
+# link dir: /home/bruce/.local/bin/sourceanalyzer
+case $JAVA_VERSION in
+    8)
+        JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+        sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+        sudo update-alternatives --set javac /usr/lib/jvm/java-8-openjdk-amd64/bin/javac
+        ;;
+    11)
+        JAVA_HOME=/usr/lib/jvm/zulu11.45.27-ca-jdk11.0.10-linux_x64
+        sudo update-alternatives --set java /usr/lib/jvm/zulu11.45.27-ca-jdk11.0.10-linux_x64/bin/java
+        sudo update-alternatives --set javac /usr/lib/jvm/zulu11.45.27-ca-jdk11.0.10-linux_x64/bin/javac
+        ;;
+    # 12)
+    #     # sudo update-alternatives --install /etc/alternatives/java java /usr/lib/jvm/jdk-12.0.2/bin/java 10
+    #     JAVA_HOME=/usr/lib/jvm/jdk-12.0.2
+    #     sudo update-alternatives --set java /usr/lib/jvm/jdk-12.0.2/bin/java
+    #     sudo update-alternatives --set javac /usr/lib/jvm/jdk-12.0.2/bin/javac
+    #     ;;
+    13)
+        # sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-13-openjdk-amd64/bin/java 13
+        # sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/java-13-openjdk-amd64/bin/javac 13
+        export JAVA_HOME=/usr/lib/jvm/java-13-openjdk-amd64
+        sudo update-alternatives --set java /usr/lib/jvm/java-13-openjdk-amd64/bin/java
+        sudo update-alternatives --set javac  /usr/lib/jvm/java-13-openjdk-amd64/bin/javac
+        ;;
+    # 14)
+    #     # sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-14.0.1/bin/java 7
+    #     JAVA_HOME=/usr/lib/jvm/jdk-14.0.1
+    #     sudo update-alternatives --set java /usr/lib/jvm/jdk-14.0.1/bin/java
+    #     sudo update-alternatives --set javac /usr/lib/jvm/jdk-14.0.1/bin/javac
+    #     ;;
+    *)
+        echo "Usage: switch <sca name>"
+        echo "JAVA version not found. Defaulting to 1.8"
+        # sudo update-alternatives --install /etc/alternatives/java java /usr/lib/jvm/java-1.8.0-openjdk-amd64/bin/java 10
+        JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+        sudo update-alternatives --set java /usr/lib/jvm/java-1.8.0-openjdk-amd64/bin/java
+        sudo update-alternatives --set javac /usr/lib/jvm/java-1.8.0-openjdk-amd64/bin/javac
+        ;;
+esac
+
+export JAVA_HOME=$JAVA_HOME
+echo "Switched to $JAVA_VERSION"
+echo "JAVA_HOME = $JAVA_HOME"
+/usr/bin/java -version

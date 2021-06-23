@@ -1,0 +1,147 @@
+source $HOME/.fortify.zsh
+# cd $HOME
+
+# ----------------
+#Vars
+# ----------------
+export PATH=/usr/local/bin:$HOME/.local/bin:$PATH
+export PATH=$PATH:/opt/gradle/gradle-6.8.2/bin
+export TERM=xterm-256color
+export GOROOT=/usr/lib/go-1.13/
+export GOPATH=$HOME/.go
+export EDITOR='nvim'
+export ZSH_COLORIZE_STYLE="monokai"
+# export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export JAVA_HOME=/usr/lib/jvm/zulu11.45.27-ca-jdk11.0.10-linux_x64
+# export JAVA_HOME=/usr/lib/jvm/jdk-12.0.2/
+# export JAVA_HOME=/usr/lib/jvm/zulu-13-amd64
+# export JAVA_HOME=/usr/lib/jvm/jdk-14.0.1/
+# ----------------
+# zplug
+# ----------------
+if [[ ! -d ~/.zplug ]]; then
+    # curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+    git clone https://github.com/zplug/zplug ~/.zplug
+    source ~/.zplug/init.zsh && zplug update
+else
+    source ~/.zplug/init.zsh
+fi
+
+zplug "zplug/zplug",                            hook-build:'zplug --self-manage'
+zplug "plugins/colored-man-pages",              from:oh-my-zsh
+zplug "plugins/colorize",                       from:oh-my-zsh
+zplug "plugins/command-not-found",              from:oh-my-zsh
+zplug "plugins/extract",                        from:oh-my-zsh
+zplug "plugins/golang",                         from:oh-my-zsh
+zplug "plugins/tmux",                           from:oh-my-zsh
+zplug "modules/completion",                     from:prezto
+zplug "modules/history",                        from:prezto
+zplug "modules/history-substring-search",       from:prezto, defer:3
+zplug "modules/terminal",                       from:prezto
+zplug "modules/tmux",                           from:prezto
+zplug "zsh-users/zsh-completions"
+zplug "zdharma/fast-syntax-highlighting"
+zplug "tarruda/zsh-autosuggestions"
+zplug "BurntSushi/ripgrep",                     defer:3, from:"gh-r", as:"command", use:"*x86_64*linux*", rename-to:"rg"
+zplug "junegunn/fzf-bin",                       defer:3, from:"gh-r", as:"command", use:"*linux_amd64*", rename-to:"fzf"
+
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
+zplug load
+
+# ----------------
+# powerlevel9k
+# ----------------
+POWERLEVEL9K_MODE=nerdfont-complete
+# POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR=''
+POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR=''
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_RPROMPT_ON_NEWLINE=true
+POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+POWERLEVEL9K=truncate_beginning
+POWERLEVEL9K_VCS_CLEAN_FOREGROUND=black
+POWERLEVEL9K_VCS_CLEAN_BACKGROUND=green
+POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND=black
+POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=yellow
+POWERLEVEL9K_VCS_MODIFIED_FOREGROUND=black
+POWERLEVEL9K_VCS_MODIFIED_BACKGROUND=yellow
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND=black
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND=blue
+POWERLEVEL9K_DIR_DEFAULT_BACKGROUND=blue
+POWERLEVEL9K_DIR_DEFAULT_FOREGROUND=yellow
+POWERLEVEL9K_DIR_HOME_BACKGROUND=blue
+POWERLEVEL9K_DIR_HOME_FOREGROUND=yellow
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND=blue
+POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND=yellow
+POWERLEVEL9K_FOLDER_ICON=
+POWERLEVEL9K_STATUS_OK_IN_NON_VERBOSE=true
+POWERLEVEL9K_STATUS_VERBOSE=false
+POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
+POWERLEVEL9K_VCS_UNTRACKED_ICON=●
+POWERLEVEL9K_VCS_UNSTAGED_ICON=±
+POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON=↓
+POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON=↑
+POWERLEVEL9K_VCS_COMMIT_ICON=' '
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='╭%F{black}'
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='╰%F{red} '
+POWERLEVEL9K_CONTEXT_TEMPLATE="%F{cyan}%n %F{white}@ %F{green}%m"
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon ssh root_indicator context dir dir_writable vcs)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time status background_jobs load ram)
+source ~/.powerlevel9k/powerlevel9k.zsh-theme
+
+# ----------------
+# Personal Aliases
+# ----------------
+alias p="pwd"
+alias vinit="nvim $HOME/.config/nvim/init.vim"
+alias pinit="nvim $HOME/.config/nvim/plugins.vim"
+alias zshrc="nvim $HOME/.zshrc"
+alias vi="nvim"
+alias ls="colorls"
+alias lsal="colorls -la --sd"
+alias tree="colorls --tree"
+alias cat="colorize_cat"
+alias less="colorize_less"
+
+# ----------------
+# Personal Functions
+# ----------------
+# fv [FUZZY PATTERN] - Open the selected file with neovim 
+fvi() {
+  local files
+  IFS=$'\n' files=($(fzf --query="$1" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && nvim "${files[@]}"
+}
+
+# fd - cd to selected directory
+fcd() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+# fh - repeat history
+fhistory() {
+  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+}
+
+# fkill - kill process
+fkill() {
+  local pid
+  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+
+  if [ "x$pid" != "x" ]
+  then
+    echo $pid | xargs kill -${1:-9}
+  fi
+}
+# ----------------
+# Bindings
+# ----------------
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
