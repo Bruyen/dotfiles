@@ -1,21 +1,26 @@
 source $HOME/.fortify.zsh
-# cd $HOME
+source $HOME/.fzf_functions.zsh
+source $HOME/.fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
 # ----------------
-#Vars
+# Vars
 # ----------------
 export PATH=/usr/local/bin:$HOME/.local/bin:$PATH
-export PATH=$PATH:/opt/gradle/gradle-6.8.2/bin
 export TERM=xterm-256color
-export GOROOT=/usr/lib/go-1.13/
-export GOPATH=$HOME/.go
-export EDITOR='nvim'
+export EDITOR='vi'
 export ZSH_COLORIZE_STYLE="monokai"
 # export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 export JAVA_HOME=/usr/lib/jvm/zulu11.45.27-ca-jdk11.0.10-linux_x64
 # export JAVA_HOME=/usr/lib/jvm/jdk-12.0.2/
 # export JAVA_HOME=/usr/lib/jvm/zulu-13-amd64
 # export JAVA_HOME=/usr/lib/jvm/jdk-14.0.1/
+# export JAVA_HOME=/usr/lib/jvm/jdk-17
+
+# TODO: Implement file/path completion
+export FZF_DEFAULT_OPTS="--height=30% --min-height=10 --reverse --multi --border --inline-info"
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
+
+export PS_FORMAT="pid,ppid,user,pri,ni,vsz,rss,pcpu,pmem,tty,stat,args" # "ps" process list default output 
 # ----------------
 # zplug
 # ----------------
@@ -27,6 +32,7 @@ else
     source ~/.zplug/init.zsh
 fi
 
+# TODO: Migrate away from zplug
 zplug "zplug/zplug",                            hook-build:'zplug --self-manage'
 zplug "plugins/colored-man-pages",              from:oh-my-zsh
 zplug "plugins/colorize",                       from:oh-my-zsh
@@ -40,10 +46,8 @@ zplug "modules/history-substring-search",       from:prezto, defer:3
 zplug "modules/terminal",                       from:prezto
 zplug "modules/tmux",                           from:prezto
 zplug "zsh-users/zsh-completions"
-zplug "zdharma/fast-syntax-highlighting"
 zplug "tarruda/zsh-autosuggestions"
 zplug "BurntSushi/ripgrep",                     defer:3, from:"gh-r", as:"command", use:"*x86_64*linux*", rename-to:"rg"
-zplug "junegunn/fzf-bin",                       defer:3, from:"gh-r", as:"command", use:"*linux_amd64*", rename-to:"fzf"
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
@@ -57,10 +61,10 @@ zplug load
 # powerlevel9k
 # ----------------
 POWERLEVEL9K_MODE=nerdfont-complete
-# POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR=''
-POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR=''
+POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR=''
+POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR=''
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_RPROMPT_ON_NEWLINE=true
+POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
 POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 POWERLEVEL9K=truncate_beginning
 POWERLEVEL9K_VCS_CLEAN_FOREGROUND=black
@@ -96,50 +100,52 @@ source ~/.powerlevel9k/powerlevel9k.zsh-theme
 # ----------------
 # Personal Aliases
 # ----------------
-alias p="pwd"
-alias vinit="nvim $HOME/.config/nvim/init.vim"
-alias pinit="nvim $HOME/.config/nvim/plugins.vim"
-alias zshrc="nvim $HOME/.zshrc"
-alias vi="nvim"
-alias ls="colorls"
-alias lsal="colorls -la --sd"
-alias tree="colorls --tree"
-alias cat="colorize_cat"
-alias less="colorize_less"
+# Prefer when present
+if type nvim > /dev/null 2>&1; then
+  alias vim='nvim'
+  alias vi="nvim"
+fi
+
+if type colorls > /dev/null 2>&1; then
+  alias ls="colorls --group-directories-first"
+  alias la="colorls -la --group-directories-first"
+  alias lg="colorls -1a | rg -i ${1}"
+  alias tree="colorls --tree=2"
+fi
+
+if type colorize_cat > /dev/null 2>&1; then
+    alias cat="colorize_cat"
+    alias less="colorize_less"
+fi
+
+alias vinit="$EDITOR $HOME/.config/nvim/init.vim"
+alias pinit="$EDITOR $HOME/.config/nvim/plugins.vim"
+alias zshrc="$EDITOR $HOME/.zshrc"
+alias zz="source $HOME/.zshrc"
+alias bitbrawl="cd /mnt/c/Users/Dude/Projects/BitBrawlers"
+
+alias gd="git diff"
+alias gpl="git pull"
+alias gp="git push"
+alias gpsu='git push --set-upstream origin "$(git branch --show-current)"'
+alias gf="git fetch"
+alias gl="git log --graph"
+alias gs="git status"
+alias ga="git add"
+alias gc="git commit"
+alias gch="git checkout"
 
 # ----------------
 # Personal Functions
 # ----------------
-# fv [FUZZY PATTERN] - Open the selected file with neovim 
-fvi() {
-  local files
-  IFS=$'\n' files=($(fzf --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && nvim "${files[@]}"
+#
+# Search for TODO|FIXME|BUG markers in a directory and open results in a Vim quickfix window
+# https://freshman.tech/vim-quickfix-and-location-list/
+#
+function todos() {
+  vim -q <(rg --vimgrep -w -e 'TODO' -e 'FIXME' -e 'BUG' $* .) -c "silent! copen"
 }
 
-# fd - cd to selected directory
-fcd() {
-  local dir
-  dir=$(find ${1:-.} -path '*/\.*' -prune \
-                  -o -type d -print 2> /dev/null | fzf +m) &&
-  cd "$dir"
-}
-
-# fh - repeat history
-fhistory() {
-  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
-}
-
-# fkill - kill process
-fkill() {
-  local pid
-  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-
-  if [ "x$pid" != "x" ]
-  then
-    echo $pid | xargs kill -${1:-9}
-  fi
-}
 # ----------------
 # Bindings
 # ----------------

@@ -36,6 +36,11 @@ case $JAVA_VERSION in
     #     sudo update-alternatives --set java /usr/lib/jvm/jdk-14.0.1/bin/java
     #     sudo update-alternatives --set javac /usr/lib/jvm/jdk-14.0.1/bin/javac
     #     ;;
+    17)
+        JAVA_HOME=/usr/lib/jvm/jdk-17
+        sudo update-alternatives --set java /usr/lib/jvm/jdk-17/bin/java
+        sudo update-alternatives --set javac /usr/lib/jvm/jdk-17/bin/javac
+        ;;
     *)
         echo "Usage: switch <sca name>"
         echo "JAVA version not found. Defaulting to 1.8"

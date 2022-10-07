@@ -12,28 +12,32 @@ let g:fortify_JDKVersion = "11"
 let g:fortify_SCAPath = "~/.local/bin/sourceanalyzer"
 let g:fortify_pluginpath = "~/.config/nvim/plugged/vim-fortify"
 let g:fortify_MemoryOpts = [ "-Xmx4096m", "-Xss24m", "-64" ]
-" let g:fortify_DefaultJarPath = "/home/bruce/SCA/Default_Jars/*"
-let g:fortify_SRF = '/home/bruce/test_SRF/srf.py'
+let g:fortify_DefaultJarPath = "/home/bruce/SCA/Default_Jars/*"
+let g:fortify_SRF = '/home/bruce/SRF/srf.py'
 " let g:fortify_PythonPath = "/usr/lib/python3.8"
+" let g:fortify_PythonPath = "/usr/lib/python3.8:/home/bruce/.local/lib/python3.8/site-packages"
 " let g:fortify_AndroidJarPath = '/home/bruce/Android/Sdk/platforms/android-30/android.jar'
 " let g:fortify_auditpane_width = "45"
 
 let g:fortify_AWBOpts = []
 
 let g:fortify_TranslationOpts = ["-verbose"]
-" let g:fortify_TranslationOpts = ["-cp \"/mnt/c/Users/Dude/Scratch/JavaTests/Dataflow_Exercise_2/lib/*\""]
-let g:fortify_TranslationOpts = ["-extdirs \"/home/bruce/SCA/Default_Jars\""]
-" let g:fortify_TranslationOpts += ['-debug', '-debug-verbose', '-logfile', 'translation.log']
+" let g:fortify_TranslationOpts += ["gcc -o test.o"] "TODO: Debug for C programs
+let g:fortify_TranslationOpts += ["-cp \"/home/bruce/SCA/Default_Jars/*\""]
+" let g:fortify_TranslationOpts += ["-cp /home/bruce/SCA/Default_Jars/grpc-api-1.48.1.jar"]
+let g:fortify_TranslationOpts += ['-debug', '-debug-verbose', '-logfile', 'translation.log']
 " let g:fortify_TranslationOpts += ["mvn", "com.fortify.sca.plugins.maven:sca-maven-plugin:translate"]
-" let g:fortify_TranslationOpts += ["-python-version", "2"]
+" let g:fortify_TranslationOpts += ["-python-version", "3"]
 " let g:fortify_TranslationOpts += ["-gopath", "/home/bruce/.go"]
-" let g:fortify_TranslationOpts += ['-project-root', 'sca_build']
-"
+let g:fortify_TranslationOpts += ['-project-root', 'sca_build']
+" let g:fortify_TranslationOpts += ['-rubygem-path', '/usr/lib/ruby/gems/2.7.0/gems:/var/lib/gems/2.7.0/gems']
+
 let g:fortify_ScanOpts = ["-verbose"]
+" let g:fortify_ScanOpts += ["-Dcom.fortify.sca.DefaultAnalyzers=configuration"]
 " let g:fortify_ScanOpts += ["-DRuleScriptDebugger=true -DScriptsToDebug=android_privilegewarnings"]
-" let g:fortify_ScanOpts += ["-debug", "-debug-verbose", "-logfile", "scan.log"]            " Generate scan logs
+let g:fortify_ScanOpts += ["-debug", "-debug-verbose", "-logfile", "scan.log"]            " Generate scan logs
 " let g:fortify_ScanOpts += ['-Ddf3.debug=/home/bruce/Scratch/JavaTests/src/taint.log']                             " Dump taint log
-" let g:fortify_ScanOpts += ['-Dcom.fortify.sca.followImports=false']                       " Do not translate and analyze all libraries that you require in your code
+" let g:fortify_ScanOpts += ['-Dcom.fortify.sca.follow.imports=false']                       " Do not translate and analyze all libraries that you require in your code
 " let g:fortify_ScanOpts += ['-Ddebug.dump-nst']                                            " For debugging purposes dumps NST files between Phase 1 and Phase 2 of analysis.
 " let g:fortify_ScanOpts += ['-Ddebug.dump-cfg']                                            " For debugging purposes controls dumping Basic Block Graph to file.
 " let g:fortify_ScanOpts += ['-Ddebug.dump-raw-cfg']                                        " Dump the cfg which is not optimized by dead code elimination
@@ -43,14 +47,18 @@ let g:fortify_ScanOpts = ["-verbose"]
 " let g:fortify_ScanOpts += ['-Ddebug.dump-model']                                          " For debugging purposes data dump of model attributes.
 " let g:fortify_ScanOpts += ['-Ddebug.dump-call-targets']                                   " For debugging purposes dump call targets for each call site
 " let g:fortify_ScanOpts += ['-Ddebug.dump-structural-tree']                                " Dumps the structural tree, Lots of output
+" let g:fortify_ScanOpts += ['-Ddebug.CFDebugFlags=sabc --no-default-rules']                " ControlFlow Debugging
 " let g:fortify_ScanOpts += ['-Dic.debug=issue_calculator.log']                             " Dump issue calculator log
 " let g:fortify_ScanOpts += ['-Dcom.fortify.sca.ThreadCount=1']                             " Disable multi-threading
-" let g:fortify_ScanOpts += ['-project-root', 'sca_build']
+let g:fortify_ScanOpts += ['-project-root', 'sca_build']
 " let g:fortify_ScanOpts += ['---show-files']
+
+" RuleScript Debugger. Do not use
+" let g:fortify_ScanOpts += ['-Djava.awt.headless=false', '-DRuleScriptDebugger=true', '-DScriptsToDebug=CDC1A085-2B3B-4D4F-95B9-14F9F0510974']
 
 " Structural Debugger
 "
-" let g:fortify_ScanOpts += ['-Dcom.fortify.sca.debug.rule=D23F2325,test.go,9 -debug -verbose']
+" let g:fortify_ScanOpts += ['-Dcom.fortify.sca.debug.rule=836CDBE5,test_heapPaths.js,17 -debug -verbose']
 
 function! s:fzf_nst_files()
     let buffer_path = resolve(expand('%:p'))
@@ -77,7 +85,7 @@ endfunction
 
 function! s:fzf_rulepack_files()
     " let command = 'rg --files -g "**/src/*.xml" ~/rules'
-    let command = 'rg --files -g "**" ~/rules'
+    let command = 'rg --files -g "**" ~/rules/src'
     call fzf#run(fzf#wrap({
         \ 'source': command,
         \ 'sink':   'e',
@@ -98,9 +106,9 @@ endfunction
 
 " Open Rules Dir
 nnoremap <Leader>or :e ~/rules<Return>
-nnoremap <leader>n :call <SID>fzf_nst_files()<Return>
-nnoremap <leader>r :call <SID>fzf_rulepack_files()<Return>
-nnoremap <leader>d :call <SID>fzf_rulepack_descriptions()<Return>
+nnoremap <Leader>n :call <SID>fzf_nst_files()<Return>
+nnoremap <Leader>r :call <SID>fzf_rulepack_files()<Return>
+nnoremap <Leader>d :call <SID>fzf_rulepack_descriptions()<Return>
 
 " Translate
 nnoremap <Leader>t :Translate %<Return>

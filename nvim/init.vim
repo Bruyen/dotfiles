@@ -1,9 +1,12 @@
+" NOTE: Command to query where a command is set:
+" :verbose set <setting>?
+
 " ================ GENERAL ================ {{{
 set autowrite                                                     " Write on shell/make command
 set nrformats=alpha,hex,octal                                     " Increment/decrement numbers. C-a,a (tmux), C-x
 set shell=/usr/bin/zsh                                            " ZSH ftw!
 set visualbell                                                    " Silent please
-set ffs=unix,dos                                                      " Use Unix EOL
+set ffs=unix,dos                                                  " Use Unix EOL
 set hidden                                                        " Hide buffers when unloaded
 set inccommand=nosplit                                            " Live preview for :substitute
 set fileencoding=utf-8
@@ -326,6 +329,8 @@ augroup active_win
 "    autocmd FocusGained,VimEnter,WinNew,WinEnter,BufWinEnter * call StatusLine()
 "    autocmd FocusLost,WinLeave * call StatusLineNC()
 augroup END
+
+autocmd TermOpen * setlocal nonumber norelativenumber
 
 " ================= END AUTOCOMMANDS =============== }}}
 "

@@ -1,20 +1,16 @@
 " lightline
 execute 'source' fnameescape(expand('~/.config/nvim/lightline.vim'))
 
-" VIM-POLYGLOT
-let g:polyglot_disabled = ["xml", "java", "vim"]
-let g:no_csv_maps = 1
-
 " ================ PLUGINS ================ {{{
 " Plug stuff
 call plug#begin('~/.config/nvim/plugged')
     Plug 'https://github.houston.softwaregrp.net/Fortify-SSR/vim-fortify'
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
-    Plug 'pbogut/fzf-mru.vim'
+    Plug 'pbogut/fzf-mru.vim'                                     " FZF Through Most Recently used
     Plug 'rhysd/committia.vim'                                    " Generates multiple panes for git commits
-    Plug 'nvim-lua/completion-nvim'                               " Completion with LSP
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } " General Completion
+    Plug 'deoplete-plugins/deoplete-lsp', { 'do': ':UpdateRemotePlugins' } " Deoplete LSP
     Plug 'vim-scripts/DeleteTrailingWhitespace'                   " Deletes trailing whitespace
     Plug 'eclipse/eclipse.jdt.ls'                                 " Java LSP
     Plug 'rhysd/git-messenger.vim'
@@ -28,24 +24,21 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'majutsushi/tagbar'                                      " Displays tags for current file
     Plug 'ap/vim-buftabline'                                      " Tabs for each buffer
     Plug 't9md/vim-choosewin'                                     " Chose Buffer
-    Plug 'alvan/vim-closetag'                                     " Autocloses XHTML tags
     Plug 'tpope/vim-commentary'                                   " Comment shortcuts
     Plug 'ap/vim-css-color'                                       " highlights color values
-    Plug 'tpope/vim-fugitive'                                     " Git wrapper
-    Plug 'airblade/vim-gitgutter'                                 " Shows git changes
+    Plug 'airblade/vim-gitgutter'                                 " Shows git changes in the sign column
     Plug 'ludovicchabant/vim-gutentags'                           " Generates tag files
     Plug 'machakann/vim-highlightedyank'                          " Highlights most recent yanked
-    Plug 'tommcdo/vim-lion'                                       " Text alignment 
+    Plug 'tommcdo/vim-lion'                                       " Text alignment; align around a given char: gl<character> 
     Plug 'andymass/vim-matchup'                                   " Highlights matching bracket/texts
     Plug 'Yilin-Yang/vim-markbar'                                 " Shows availes Vim markers
     Plug 'matze/vim-move'                                         " Move selections
-    Plug 'sheerun/vim-polyglot'                                   " Collection of language packs
     Plug 'airblade/vim-rooter'                                    " Changes the working directory to the project root
     Plug 'google/vim-searchindex'                                 " Shows current index of searches
     Plug 'kshenoy/vim-signature'                                  " Displays Vim marks
-    Plug 'chaoren/vim-wordmotion'                                 " Word Navigation
+    Plug 'SirVer/ultisnips'                                       " Snippet engine
+    Plug 'honza/vim-snippets'                                     " community snippets
     Plug 'tomasr/molokai'                                         " Colorscheme
-    Plug 'fmoralesc/molokayo'                                     " Colorscheme
     Plug 'morhetz/gruvbox'                                        " Colorscheme
 call plug#end()
 
@@ -61,13 +54,11 @@ call plug#end()
 " Surrounds text in matching text
 " Plug 'machakann/vim-sandwich'
 
-" Code Snippet generation
-" Plug 'SirVer/ultisnips'
-" Plug 'honza/vim-snippets'
-
 " theme
 set background=dark
-colorscheme gruvbox
+colorscheme molokai
+" Set transparent background
+hi Normal guibg=NONE ctermbg=NONE
 
 " choosewin configs
 nmap <c-w><c-w> <plug>(choosewin)
@@ -83,36 +74,49 @@ let g:choosewin_color_overlay_current = {
         \ 'cterm': [124, 124]
         \ }
 
-" " " ULTISNIPS
+" ULTISNIPS
 " let g:UltiSnipsExpandTrigger="<tab>"
-" let g:UltiSnipsJumpForwardTrigger="<c-j>"
-" let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+" let g:UltiSnipsExpandTrigger="<C-S-s>"
+let g:UltiSnipsJumpForwardTrigger="<c-Up>"
+let g:UltiSnipsJumpBackwardTrigger="<c-Down>"
 
 " fzf configs
 nnoremap <c-p> :FZF<Return>
 nnoremap <c-f> :Rg<Return>
-" TODO: Integrate FZF properly
-" nnoremap <c-p> :call fzf#vim#files('.', {'options': '--prompt ""'})<Return>
+" nnoremap <c-m> :FZFMru<Return>
 nnoremap <leader>b :Buffers<Return>
 nnoremap <leader>h :FZFFreshMru --prompt ""<Return>
-let $FZF_DEFAULT_OPTS='--no-inline-info --margin=1,2 --color=dark ' .
-    \ '--color=fg:#d0d0d0,bg:#020511,hl:#0088ff '.
-    \ '--color=fg+:#ffc600,bg+:#020511,hl+:#ffc600 '.
-    \ '--color=marker:#3ad900,spinner:#967efb,header:#0088ff '.
-    \ '--color=info:#020511,prompt:#0088ff,pointer:#0088ff'
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   "rg --column --line-number --no-heading --color=always --smart-case -g '!{test/*,.git}' -- ".shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
+
+let $FZF_DEFAULT_OPTS='--inline-info --margin=1,2 --color=dark --border ' .
+    \ '--color=fg:#ebdbb2,bg:#1B1D1E,hl:#66d9ef '.
+    \ '--color=fg+:#ebdbb2,bg+:#293739,hl+:#F92672 '.
+    \ '--color=marker:#fd971f,spinner:#E6DB74,header:#7E8E91 '.
+    \ '--color=info:#ae81ff,prompt:#A6E22E,pointer:#A6E22E '.
+    \ '--color=border:#808080 '
+    " \ '--preview "cat {}"'
+    "' TODO: Add preview for non binary files, using a key mapping
+" TODO: height 30-40%
+" TODO: FZF HelpTags
+" TODO: Fzf Buffers
+" TODO: Fzf path completion
 
 " let $FZF_DEFAULT_COMMAND =  "find * -path '*/\.*' -prune -o -path 'node_modules/**' -prune -o -path 'target/**' -prune -o -path 'dist/**' -prune -o  -type f -print -o -type l -print 2> /dev/null"
-let g:fzf_layout = {}
-" let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+" let g:fzf_layout = {}
+let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 
 function! FloatingFZF()
   let buf = nvim_create_buf(v:false, v:true)
   call setbufvar(buf, '&signcolumn', 'no')
 
   let height = float2nr(30)
-  let width = float2nr(90)
+  let width = float2nr(180)
   let horizontal = float2nr((&columns - width) / 2)
-  let vertical = 1
+  let vertical = 25
 
   let opts = {
         \ 'relative': 'editor',
@@ -193,53 +197,25 @@ let g:closetag_xhtml_filetypes = 'xhtml,jsx,fortifyrulepack'
 " VIM-ROOTER
 " let g:rooter_use_lcd = 1
 let g:rooter_cd_cmd="lcd"
-let g:rooter_patterns = ['build.gradle', 'pom.xml', '.git/']
+let g:rooter_patterns = ['build.gradle', 'pom.xml', '.git/', 'Gemfile', '.gitignore', 'Dockerfile', '.vim-rooter']
 let g:rooter_silent_chdir = 1
 let g:rooter_change_directory_for_non_project_files = 'current'
 
-" completion-nvim
-set completeopt=menuone,noinsert,noselect
-let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy', 'all']
-" Use completion-nvim in every buffer
-autocmd BufEnter * lua require'completion'.on_attach()
-
 " nvim-lsp
-lua <<EOF
-    local nvim_lsp = require'lspconfig'
-    local configs = require'lspconfig/configs'
-    configs.gopls = {
-        default_config = {
-            cmd = {'/home/bruce/.go/bin/gopls'};
-            filetypes = { "go", "gomod" };
-            root_dir = function(fname)
-                return nvim_lsp.util.find_git_ancestor(fname) or vim.loop.os_homedir()
-            end;
-            settings = {};
-        };
-    }
-
-    local java_root = nvim_lsp.util.root_pattern('.project', 'pom.xml', 'project.xml', '.git');
-    configs.jdtls = {
-        default_config = {
-            cmd = {'jdtls'};
-            filetypes = {'java'};
-            root_dir = function(fname)
-                return java_root(fname) or vim.loop.os_homedir()
-            end;
-            settings = {};
-        };
-    }
-    nvim_lsp.gopls.setup{}
-    nvim_lsp.jdtls.setup{}
-EOF
-lua require'lspconfig'.pyls.setup{}
+" https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+lua require'lspconfig'.pylsp.setup{}
+lua require'lspconfig'.gopls.setup{cmd={'/home/bruce/.go/bin/gopls'}}
+lua require'lspconfig'.jdtls.setup{cmd={'jdtls'}}
+lua require'lspconfig'.tsserver.setup{}
 
 " Deoplete configs
-" TODO: Disable for LSP enabled languages
-autocmd FileType java call deoplete#custom#buffer_option('auto_complete', v:false)
-autocmd FileType py call deoplete#custom#buffer_option('auto_complete', v:false)
-autocmd BufEnter * nested if getfsize(@%) < 100000 | call deoplete#enable() | endif
+" autocmd BufEnter * nested if getfsize(@%) < 100000 | call deoplete#enable() | endif
+" autocmd FileType java call deoplete#custom#buffer_option('auto_complete', v:false)
+" autocmd FileType py call deoplete#custom#buffer_option('auto_complete', v:false)
+" autocmd FileType go call deoplete#custom#buffer_option('auto_complete', v:false)
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#lsp#handler_enabled = 1
+let g:deoplete#lsp#use_icons_for_candidates = 1
 call deoplete#custom#option({
     \ 'auto_complete_delay': 300,
     \ 'smart_case': v:true,

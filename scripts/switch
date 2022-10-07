@@ -1,0 +1,33 @@
+#!/bin/bash
+SCA_VERSION=$1
+
+# Ex:
+# sudo update-alternatives --config java #set to 8
+# sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+# sudo update-alternatives --install  ~/.local/bin/sourceanalyzer sourceanalyzer /home/bruce/SCA/Fortify_SCA_and_Apps_20.2.2/bin/sourceanalyzer 8
+
+# link dir: /home/bruce/.local/bin/sourceanalyzer
+case $SCA_VERSION in
+    21.2)
+        sudo update-alternatives --set sourceanalyzer /home/bruce/SCA/Fortify_SCA_and_Apps_21.2.2/bin/sourceanalyzer
+        ;;
+    21.1)
+        sudo update-alternatives --set sourceanalyzer /home/bruce/SCA/Fortify_SCA_and_Apps_21.1.0/bin/sourceanalyzer
+        ;;
+    20.2)
+        sudo update-alternatives --set sourceanalyzer /home/bruce/SCA/Fortify_SCA_and_Apps_20.2.2/bin/sourceanalyzer
+        ;;
+    dev)
+        sudo update-alternatives --install /home/bruce/.local/bin/sourceanalyzer sourceanalyzer /home/bruce/SCA/sca/_stage/SCA/bin/sourceanalyzer 10
+        sudo update-alternatives --set sourceanalyzer /home/bruce/SCA/sca/_stage/SCA/bin/sourceanalyzer
+        ;;
+    *)
+        echo "Usage: switch <sca name>"
+        echo "SCA version not found. Defaulting to dev build"
+        sudo update-alternatives --install /home/bruce/.local/bin/sourceanalyzer sourceanalyzer /home/bruce/SCA/sca/_stage/SCA/bin/sourceanalyzer 10
+        sudo update-alternatives --set sourceanalyzer /home/bruce/SCA/sca/_stage/SCA/bin/sourceanalyzer
+        ;;
+esac
+
+echo "Switched to $SCA_VERSION"
+sourceanalyzer -version

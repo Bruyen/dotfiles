@@ -55,7 +55,7 @@
                 "fontFace": "DroidSansMono NF",
                 "fontSize": 14,
                 "colorScheme": "Tango Dark",
-                "acrylicOpacity": 0.75,
+                "acrylicOpacity": 0.70,
                 "useAcrylic" : true,
                 "closeOnExit": true,
                 "cursorShape": "filledBox"
@@ -99,6 +99,7 @@
         { "command": null, "keys": ["ctrl+shift+left"] },
         { "command": null, "keys": ["ctrl+shift+right"] },
         { "command": null, "keys": ["ctrl+v"] },
+        { "command": null, "keys": ["ctrl+tab"] },
         { "command": { "action": "switchToTab", "index": 0 }, "keys": "alt+1" },
         { "command": { "action": "switchToTab", "index": 1 }, "keys": "alt+2" },
         { "command": { "action": "switchToTab", "index": 2 }, "keys": "alt+3" },

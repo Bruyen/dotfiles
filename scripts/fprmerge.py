@@ -29,6 +29,11 @@ def mergeFPRs(expected, actual):
     target = "/mnt/c/Users/Dude/Downloads/."
     subprocess.run(["/usr/bin/mv", out, target])
 
+    print()
+    print("If everything looks good:")
+    print()
+    print("cp " + actual + " " + expected)
+
 
 if __name__ == "__main__":
     actualFile = ''
@@ -54,8 +59,3 @@ if __name__ == "__main__":
     elif len(files) == 1 and actualFile:
         project=files[0]
         mergeFPRs(project, actualFile)
-
-        print()
-        print("If everything looks good:")
-        print()
-        print("cp " + actualFile + " " + project)
