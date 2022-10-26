@@ -20,10 +20,6 @@ alias sourceanalyzer="~/.local/bin/sourceanalyzer"
 alias scav="sourceanalyzer -v"
 alias sca='sourceanalyzer'
 
-alias mylog="vi $WORK/LOG.md"
-alias dotfiles="cd $WORK/dotfiles"
-
-
 # ------------------
 # Personal Functions
 # ------------------
@@ -60,7 +56,7 @@ function desc(){
         fzf --ansi \
             --height=60% \
             --delimiter : \
-            --preview 'batcat --color=always {1} --highlight-line {2} --style=numbers,snip'  \
+            --preview 'bat --color=always {1} --highlight-line {2} --style=numbers,snip'  \
             --preview-window 'down:75%:+{2}+3/3' |
         cut -d':' -f1 |
         sort -u
@@ -83,7 +79,7 @@ function grule(){
         fzf --ansi \
             --height=60% \
             --delimiter : \
-            --preview 'batcat --color=always {1} --highlight-line {2} --style=numbers,snip'  \
+            --preview 'bat --color=always {1} --highlight-line {2} --style=numbers,snip'  \
             --preview-window 'down:75%:+{2}+3/3' |
         cut -d':' -f1 |
         sort -u

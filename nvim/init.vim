@@ -383,4 +383,4 @@ let g:loaded_netrwPlugin = 1
 " Plugins
 execute 'source' fnameescape(expand('~/.config/nvim/plugins.vim'))
 " Fortify plugin configs
-execute 'source' fnameescape(expand('~/.config/nvim/fortify.vim'))
+" execute 'source' fnameescape(expand('~/.config/nvim/fortify.vim'))

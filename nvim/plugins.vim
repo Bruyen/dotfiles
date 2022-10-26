@@ -4,7 +4,6 @@ execute 'source' fnameescape(expand('~/.config/nvim/lightline.vim'))
 " ================ PLUGINS ================ {{{
 " Plug stuff
 call plug#begin('~/.config/nvim/plugged')
-    Plug 'https://github.houston.softwaregrp.net/Fortify-SSR/vim-fortify'
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
     Plug 'pbogut/fzf-mru.vim'                                     " FZF Through Most Recently used

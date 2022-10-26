@@ -1,4 +1,4 @@
-source $HOME/.fortify.zsh
+source $HOME/.aws.zsh
 source $HOME/.fzf_functions.zsh
 source $HOME/.fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
@@ -7,19 +7,13 @@ source $HOME/.fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 # ----------------
 export PATH=/usr/local/bin:$HOME/.local/bin:$PATH
 export TERM=xterm-256color
-export EDITOR='vi'
+export EDITOR='nvim'
 export ZSH_COLORIZE_STYLE="monokai"
 # export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-export JAVA_HOME=/usr/lib/jvm/zulu11.45.27-ca-jdk11.0.10-linux_x64
-# export JAVA_HOME=/usr/lib/jvm/jdk-12.0.2/
-# export JAVA_HOME=/usr/lib/jvm/zulu-13-amd64
-# export JAVA_HOME=/usr/lib/jvm/jdk-14.0.1/
-# export JAVA_HOME=/usr/lib/jvm/jdk-17
 
 # TODO: Implement file/path completion
 export FZF_DEFAULT_OPTS="--height=30% --min-height=10 --reverse --multi --border --inline-info"
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
-
 export PS_FORMAT="pid,ppid,user,pri,ni,vsz,rss,pcpu,pmem,tty,stat,args" # "ps" process list default output 
 # ----------------
 # zplug
@@ -47,7 +41,6 @@ zplug "modules/terminal",                       from:prezto
 zplug "modules/tmux",                           from:prezto
 zplug "zsh-users/zsh-completions"
 zplug "tarruda/zsh-autosuggestions"
-zplug "BurntSushi/ripgrep",                     defer:3, from:"gh-r", as:"command", use:"*x86_64*linux*", rename-to:"rg"
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
@@ -90,9 +83,9 @@ POWERLEVEL9K_VCS_UNSTAGED_ICON=±
 POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON=↓
 POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON=↑
 POWERLEVEL9K_VCS_COMMIT_ICON=' '
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='╭%F{black}'
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='╰%F{red} '
-POWERLEVEL9K_CONTEXT_TEMPLATE="%F{cyan}%n %F{white}@ %F{green}%m"
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='╭'
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='╰ %F{red} '
+POWERLEVEL9K_CONTEXT_TEMPLATE="%F{cyan}%n%F{white}"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon ssh root_indicator context dir dir_writable vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time status background_jobs load ram)
 source ~/.powerlevel9k/powerlevel9k.zsh-theme
@@ -122,7 +115,9 @@ alias vinit="$EDITOR $HOME/.config/nvim/init.vim"
 alias pinit="$EDITOR $HOME/.config/nvim/plugins.vim"
 alias zshrc="$EDITOR $HOME/.zshrc"
 alias zz="source $HOME/.zshrc"
-alias bitbrawl="cd /mnt/c/Users/Dude/Projects/BitBrawlers"
+# alias bitbrawl="cd /mnt/c/Users/Dude/Projects/BitBrawlers"
+alias dotfiles="cd $HOME/dotfiles"
+alias mylog="$EDITOR $HOME/LOG.md"
 
 alias gd="git diff"
 alias gpl="git pull"
