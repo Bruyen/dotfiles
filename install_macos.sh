@@ -9,7 +9,7 @@ echo "[dotfiles - install.sh] Brew"
 brew analytics off # Disable brew analytics
 
 echo "[dotfiles - install.sh] Brew packages"
-packages="wget bat curl neovim python ruby fzf ripgrep"
+packages="wget bat curl neovim python ruby fzf ripgrep git"
 brew install $packages
 
 echo "[dotfiles - install.sh] home"
@@ -35,7 +35,7 @@ pip3 install $pip3_packages
 # curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 # pip3 install $pip3_packages --user
 
-# echo "[dotfiles - install.sh] vim configs"
+echo "[dotfiles - install.sh] vim configs"
 mkdir -p $HOME/.config/nvim
 ln -sf "$DOTFILES/nvim/init.vim" "$HOME/.config/nvim/init.vim"
 ln -sf "$DOTFILES/nvim/lightline.vim" "$HOME/.config/nvim/lightline.vim"
@@ -68,10 +68,14 @@ git clone https://github.com/zdharma-continuum/fast-syntax-highlighting ~/.fast-
 
 ## Manual Steps
 
+## SSH
+# ssh-keygen -t rsa -b 2048 -m PEM
+
 ## clone dis -> github.com/universal-ctags/ctags/blob/master/docs/autotools.rst
+
 # Change terminal font to DroidSansMono Nerd Font Book
 # git clone --depth 1 https://github.com/ryanoasis/nerd-fonts.git ~/.nerd-fonts
-# ~/.nerd-fonts/install.sh UbuntuMono
+# ~/.nerd-fonts/install.sh DroidSansMono
 
 # Java LSP, After nvim PlugInstall
 # cd ~/.config/nvim/plugged/eclipse.jdt.ls

@@ -202,10 +202,10 @@ let g:rooter_change_directory_for_non_project_files = 'current'
 
 " nvim-lsp
 " https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-lua require'lspconfig'.pylsp.setup{}
-lua require'lspconfig'.gopls.setup{cmd={'/home/bruce/.go/bin/gopls'}}
-lua require'lspconfig'.jdtls.setup{cmd={'jdtls'}}
-lua require'lspconfig'.tsserver.setup{}
+" lua require'lspconfig'.pylsp.setup{}
+" lua require'lspconfig'.gopls.setup{cmd={'/home/bruce/.go/bin/gopls'}}
+" lua require'lspconfig'.jdtls.setup{cmd={'jdtls'}}
+" lua require'lspconfig'.tsserver.setup{}
 
 " Deoplete configs
 " autocmd BufEnter * nested if getfsize(@%) < 100000 | call deoplete#enable() | endif

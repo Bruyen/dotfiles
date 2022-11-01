@@ -115,7 +115,6 @@ alias vinit="$EDITOR $HOME/.config/nvim/init.vim"
 alias pinit="$EDITOR $HOME/.config/nvim/plugins.vim"
 alias zshrc="$EDITOR $HOME/.zshrc"
 alias zz="source $HOME/.zshrc"
-# alias bitbrawl="cd /mnt/c/Users/Dude/Projects/BitBrawlers"
 alias dotfiles="cd $HOME/dotfiles"
 alias mylog="$EDITOR $HOME/LOG.md"
 
