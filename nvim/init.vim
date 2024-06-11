@@ -86,7 +86,6 @@ endif
 " ===================================== }}}
 
 " ================ MOUSE ================ {{{
-behave xterm                                                      " Behave like xterm
 if has('mouse')
     set mouse=a                                                   " Mouse support
     if !has('nvim')
