@@ -28,7 +28,7 @@ frg(){
         fzf --ansi \
             --height=60% \
             --delimiter : \
-            --preview 'bat --color=always {1} --highlight-line {2} --style=numbers,snip'  \
+            --preview 'batcat --color=always {1} --highlight-line {2} --style=numbers,snip'  \
             --preview-window 'down:75%:+{2}+3/3' |
         cut -d':' -f1 |
         sort -u
@@ -103,7 +103,7 @@ _fgd() {
 
     git -c color.status=always status --short |
     fzf --height=50% -m --ansi --preview-window right:75% --nth 2..,.. \
-    --preview '(git diff --color=always -- {-1} | sed 1,4d; bat --color=always {-1} --style=numbers,snip)' |
+    --preview '(git diff --color=always -- {-1} | sed 1,4d; batcat --color=always {-1} --style=numbers,snip)' |
     cut -c4- | sed 's/.* -> //'
 }
 

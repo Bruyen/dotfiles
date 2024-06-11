@@ -1,4 +1,4 @@
-source $HOME/.aws.zsh
+source <(fzf --zsh) # Set up fzf key bindings and fuzzy completion
 source $HOME/.fzf_functions.zsh
 source $HOME/.fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
@@ -32,13 +32,10 @@ zplug "plugins/colored-man-pages",              from:oh-my-zsh
 zplug "plugins/colorize",                       from:oh-my-zsh
 zplug "plugins/command-not-found",              from:oh-my-zsh
 zplug "plugins/extract",                        from:oh-my-zsh
-zplug "plugins/golang",                         from:oh-my-zsh
-zplug "plugins/tmux",                           from:oh-my-zsh
 zplug "modules/completion",                     from:prezto
 zplug "modules/history",                        from:prezto
 zplug "modules/history-substring-search",       from:prezto, defer:3
 zplug "modules/terminal",                       from:prezto
-zplug "modules/tmux",                           from:prezto
 zplug "zsh-users/zsh-completions"
 zplug "tarruda/zsh-autosuggestions"
 
