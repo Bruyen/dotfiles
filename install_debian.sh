@@ -53,6 +53,11 @@ echo "[dotfiles - install.sh] Start"
 DOTFILES=$(pwd)
 
 #
+# Shit doesn't work on FireFox sometimes
+#
+sudo apt install chromium
+
+#
 # Git
 #
 ln -sf "$DOTFILES/home/gitignore_global" "$HOME/.gitignore_global"
@@ -130,6 +135,7 @@ cd -
 # --                - https://docs.unrealengine.com/4.27/en-US/SharingAndReleasing/Linux/BeginnerLinuxDeveloper/SettingUpAnUnrealWorkflow/
 # -- Lutris         - https://lutris.net/downloads
 # -- Change fonts to DejaVuSansMono
-
+# -- Create a symbolic link of my Unreal projects into the Epic Games Launcher Dir
+#    -- ln -sf /home/user/Documents/Unreal\ Projects /home/user/Games/epic-games-store/drive_c/users/user/Documents
 
 echo "[dotfiles - install.sh] Done"

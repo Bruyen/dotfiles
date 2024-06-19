@@ -10,6 +10,7 @@ export TERM=xterm-256color
 export EDITOR='nvim'
 export ZSH_COLORIZE_STYLE="monokai"
 # export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export EPICGAMESDIR="/home/user/Games/epic-games-store/drive_c/users/user/Documents"
 
 # TODO: Implement file/path completion
 export FZF_DEFAULT_OPTS="--height=30% --min-height=10 --reverse --multi --border --inline-info"
@@ -114,6 +115,7 @@ alias zshrc="$EDITOR $HOME/.zshrc"
 alias zz="source $HOME/.zshrc"
 alias dotfiles="cd $HOME/dotfiles"
 alias mylog="$EDITOR $HOME/LOG.md"
+alias notes="$EDITOR /home/user/Dropbox/Notes/"
 
 alias gd="git diff"
 alias gpl="git pull"
@@ -130,12 +132,31 @@ alias gch="git checkout"
 # Personal Functions
 # ----------------
 #
+
+#
 # Search for TODO|FIXME|BUG markers in a directory and open results in a Vim quickfix window
 # https://freshman.tech/vim-quickfix-and-location-list/
 #
 function todos() {
   vim -q <(rg --vimgrep -w -e 'TODO' -e 'FIXME' -e 'BUG' $* .) -c "silent! copen"
 }
+
+#
+# Backs up UE Project to Dropbox Dir
+#
+# TODO: Add fzf when there is more than one project to backup
+function backup_UE_proj(){
+    local project="Prototype_BitBrawl"
+    local source_dir="/home/user/Documents/Unreal Projects/$project/"
+    local target_dir="/home/user/Dropbox/Projects/UE_Projects/."
+
+    zip -r "${project}_$(date +'%Y.%-m.%-d').zip" $source_dir
+    echo "[backup_UE_proj] zip -r ${project}_$(date +'%Y.%-m.%-d').zip $source_dir"
+
+    mv "${project}_$(date +'%Y.%-m.%-d').zip" $target_dir
+    echo "[backup_UE_proj] mv ${project}_$(date +'%Y.%-m.%-d').zip $target_dir"
+}
+
 
 # ----------------
 # Bindings
