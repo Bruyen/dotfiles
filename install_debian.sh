@@ -5,7 +5,6 @@
 #
 # -- SSH Key        - ssh-keygen -t ed25519
 
-
 sudo apt install -y gcc make
 
 #
@@ -13,15 +12,7 @@ sudo apt install -y gcc make
 #
 # Before installing the drivers, you must obtain the proper kernel headers for the NVIDIA driver to build with.
 # For a typical 64-bit system using the default kernel, you can simply run:
-sudo apt install -y linux-headers-amd64
-
-# Add components to /etc/apt/sources.list
-# Prerequisite: Append "deb http://deb.debian.org/debian/ bookworm main contrib non-free" to /etc/apt/sources.list manually
-# Update the list of available packages
-# Then we can install the nvidia-driver package + necessary firmware
-# TODO: Fix. Probably a way to append to sources.list using sudo tee
-sudo apt update
-sudo apt install -y nvidia-driver firmware-misc-nonfree
+# sudo apt install -y linux-headers-amd64  # Maybe needed with proprietary driver?
 
 #
 # Steam - https://wiki.debian.org/Steam
@@ -44,7 +35,7 @@ sudo apt install spotify-client
 #
 # dos2unix
 #
-sudo apt install dos2unix
+sudo apt install -y dos2unix
 
 # TODO: install wine
 
@@ -128,7 +119,7 @@ cd -
 #
 # Manual Steps
 #
-# -- Use gnome      - disks to configure the disk to automount
+# -- NVIDIA Drivers - https://www.nvidia.com/en-in/drivers/
 # -- Virtualbox     - https://wiki.debian.org/VirtualBox
 # -- Latest FireFox - https://support.mozilla.org/en-US/kb/install-firefox-linux#w_install-firefox-deb-package-for-debian-based-distributions
 # -- Unreal Engine  - https://www.unrealengine.com/en-US/linux
@@ -137,5 +128,9 @@ cd -
 # -- Change fonts to DejaVuSansMono
 # -- Create a symbolic link of my Unreal projects into the Epic Games Launcher Dir
 #    -- ln -sf /home/user/Documents/Unreal\ Projects /home/user/Games/epic-games-store/drive_c/users/user/Documents
+# -- VSCodium       - https://github.com/VSCodium/vscodium
+#    -- # Probable can automate this TODO
+
+# TODO: Add Plasma config
 
 echo "[dotfiles - install.sh] Done"

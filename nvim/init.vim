@@ -383,3 +383,7 @@ let g:loaded_netrwPlugin = 1
 execute 'source' fnameescape(expand('~/.config/nvim/plugins.vim'))
 " Fortify plugin configs
 " execute 'source' fnameescape(expand('~/.config/nvim/fortify.vim'))
+
+" TODO: Investigate what is slowing down startup
+let g:python_host_skip_check = 1
+let g:python3_host_skip_check = 1

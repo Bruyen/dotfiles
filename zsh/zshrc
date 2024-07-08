@@ -116,6 +116,8 @@ alias zz="source $HOME/.zshrc"
 alias dotfiles="cd $HOME/dotfiles"
 alias mylog="$EDITOR $HOME/LOG.md"
 alias notes="$EDITOR /home/user/Dropbox/Notes/"
+alias uenotes="$EDITOR /home/user/Dropbox/Notes/Game_Dev_Notes/UE_Notes.md"
+alias downloads="cd $HOME/Downloads"
 
 alias gd="git diff"
 alias gpl="git pull"
